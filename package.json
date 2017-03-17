@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/saileshkasaju/node-generator#readme",
   "dependencies": {
+    "co": "^4.6.0",
     "node-fetch": "^1.6.3"
   }
 }
