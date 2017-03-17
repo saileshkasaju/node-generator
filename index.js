@@ -7,9 +7,18 @@ function* createQuoteFetcher() {
 	return `${quote.quoteText} -${quote.quoteAuthor}`
 }
 
-const quoteFetcher = createQuoteFetcher()
-quoteFetcher.next().value
-	.then(res => quoteFetcher.next(res).value)
-	.then(res => quoteFetcher.next(res).value)
-	.then(quote => console.log(quote))
+const coroutine = (gen) => {
+	const generator = gen()
+
+	const handle = (result) => {
+		if(result.done) return Promise.resolve(result.value)
+		return Promise.resolve(result.value)
+			.then(res => handle(generator.next(res)))
+	}
+
+	return handle(generator.next())
+}
+
+const quoteFetcher = coroutine(createQuoteFetcher)
+quoteFetcher.then(quote => console.log(quote))
 	.catch(err => console.log(err))
